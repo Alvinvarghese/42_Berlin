@@ -1,0 +1,65 @@
+# Name of the final executable
+NAME = philo
+
+# C compiler
+CC = cc
+
+# Compiler flags
+CFLAGS = -Wall -Wextra -Werror -pthread -O2
+
+# Command to remove files and directories
+RM = rm -rf
+
+# List of header file dependencies
+DEPENDENCIES = philo.h
+
+# List of source files
+SRCS = philo.c \
+	arg_check.c \
+	philo_info.c \
+	philo_intialize.c \
+	thread.c \
+	fork.c \
+	routine.c \
+	eat.c \
+	sleep_think.c \
+	die.c \
+	display_mssg.c \
+	utils.c \
+	cleanup_resources.c
+
+# Directory for object files
+OBJ_DIR = obj
+
+# List of object files, placing them in the $(OBJ_DIR)
+OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
+
+# Pattern rule to compile .c files into .o files in the $(OBJ_DIR)
+# $< is the first prerequisite (the .c file)
+# $@ is the target (the .o file)
+$(OBJ_DIR)/%.o: %.c $(DEPENDENCIES)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Default target: build the final executable
+all : $(NAME)
+
+# Link object files to create the final executable
+# $^ is the list of all prerequisites (the .o files)
+# $@ is the target (the final executable)
+$(NAME) : $(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@
+
+# Clean target: remove all object files
+clean :
+	$(RM) $(OBJ_DIR)
+
+# Full clean target: remove all object files and the final executable
+fclean : clean
+	$(RM) $(NAME)
+
+# Rebuild target: perform a full clean, then build everything again
+re : fclean all
+
+# Declare these targets as phony to avoid conflicts with files of the same name
+.PHONY : all clean fclean re
