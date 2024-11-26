@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avarghes <avarghes@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/26 03:31:54 by avarghes          #+#    #+#             */
+/*   Updated: 2024/11/26 03:34:26 by avarghes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "philo.h"
 
@@ -8,22 +19,17 @@ void	*routine(void *arg)
 
 	phil = (t_phil *)arg;
 	eat_count = 0;
-	//fprintf(stderr, "\nThread %d started\n\n", phil->id);
-	// Wait until the start time is reached
-	//while (get_current_time() < phil->info->start_time)
-	while (0 < (phil->info->start_time  - get_current_time()))
+	while (0 < (phil->info->start_time - get_current_time()))
 	{
-		printf("Waiting for start time: %d\n", phil ->id);
 		usleep(100);
 	}
 	while (phil->n_eat == -1 || eat_count < phil->n_eat)
 	{
 		perform_thinking(phil);
 		if (!perform_eating(phil))
-			break;
+			break ;
 		if (!perform_sleeping(phil))
-			break;
-		//usleep(1000);
+			break ;
 		eat_count++;
 	}
 	return (NULL);

@@ -23,6 +23,7 @@ SRCS = philo.c \
 	fork.c \
 	routine.c \
 	eat.c \
+	acquire_fork.c \
 	sleep_think.c \
 	die.c \
 	display_mssg.c \

@@ -1,19 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   eat.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avarghes <avarghes@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/26 03:07:50 by avarghes          #+#    #+#             */
+/*   Updated: 2024/11/26 03:16:56 by avarghes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "philo.h"
 
-static int check_starving(t_phil *phil)
+int	check_starving(t_phil *phil)
 {
-	t_info *info;
-	int any_starving;
-	int i;
+	t_info	*info;
+	int		any_starving;
+	int		i;
 
 	i = 0;
 	info = (phil)->info;
 	any_starving = 0;
 	pthread_mutex_lock(&info->starving_mutex);
-	if (phil->time_rest <= (phil->time_eat + (phil->time_sleep/2)))
+	if (phil->time_rest <= (phil->time_eat + (phil->time_sleep / 2)))
 	{
-		info->phil_starving[phil->id-1] = 1;
+		info->phil_starving[phil->id - 1] = 1;
 		phil->is_starving = 1;
 	}
 	while (i < phil->n)
@@ -21,7 +32,7 @@ static int check_starving(t_phil *phil)
 		if (info->phil_starving[i])
 		{
 			any_starving = 1;
-			break;
+			break ;
 		}
 		i++;
 	}
@@ -40,7 +51,6 @@ int	perform_eating(t_phil *phil)
 	{
 		if (!acquire_fork(phil, phil->right, phil->left))
 			return (0);
-		
 	}
 	print(phil, "is eating");
 	phil->time_rest = phil->time_die;
@@ -52,35 +62,33 @@ int	perform_eating(t_phil *phil)
 
 int	eat_time(t_phil *phil, int time)
 {
-	int	start_time;
-	t_info *info;
+	int		start_time;
+	t_info	*info;
 
 	info = (phil)->info;
-	phil->is_starving = 0; 
+	phil->is_starving = 0;
 	pthread_mutex_lock(&info->starving_mutex);
 	phil->info->phil_starving[phil->id - 1] = 0;
 	pthread_mutex_unlock(&info->starving_mutex);
 	start_time = get_current_time();
 	if (phil->time_rest < time)
 		time = phil->time_rest;
-	// Wait for the specified time or until the philosopher dies
 	while (get_elapsed_time(start_time) < time)
 	{
 		if (has_philosopher_died(phil))
-			return (0); // Stop if the philosopher has died
-		usleep(1000); // Avoid busy-waiting
+			return (0);
+		usleep(1000);
 	}
-	//Reduce the remaining time and check for death
 	phil->time_rest -= time;
 	if (phil->time_rest <= 0)
 	{
 		handle_death(phil);
-		return (0); // Indicate failure if the philosopher dies
+		return (0);
 	}
-	return (1); // Successfully completed eating time
+	return (1);
 }
 
-int	acquire_fork(t_phil *phil, t_fork *fork_1, t_fork *fork_2)
+/* int	acquire_fork(t_phil *phil, t_fork *fork_1, t_fork *fork_2)
 {
 	long long	start_time;
 	int any_starving;
@@ -101,7 +109,7 @@ int	acquire_fork(t_phil *phil, t_fork *fork_1, t_fork *fork_2)
 			any_starving = check_starving(phil);
 			if (!any_starving || phil->is_starving)
 			{
-				phil->time_rest = get_elapsed_time(start_time); 
+				phil->time_rest -= get_elapsed_time(start_time); 
 				start_time = get_current_time(); 
 				if (has_philosopher_died (phil)) 
 					return (0);
@@ -139,7 +147,9 @@ int	acquire_fork(t_phil *phil, t_fork *fork_1, t_fork *fork_2)
 	}
 	handle_death(phil);
 	return (0);
-}
+} */
+
+// above code splitted by cody
 
 void	release_fork(t_fork *fork)
 {
@@ -147,4 +157,3 @@ void	release_fork(t_fork *fork)
 	fork->free = 1;
 	pthread_mutex_unlock(&fork->lock);
 }
-

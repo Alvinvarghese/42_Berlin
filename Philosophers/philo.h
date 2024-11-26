@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avarghes <avarghes@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/26 03:31:39 by avarghes          #+#    #+#             */
+/*   Updated: 2024/11/26 03:31:42 by avarghes         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -7,7 +19,7 @@
 # include <pthread.h>        // pthread_create, pthread_join
 # include <sys/time.h>     // gettimeofday
 # include <limits.h>
-
+# include <string.h>
 
 typedef struct s_info
 {
@@ -20,7 +32,6 @@ typedef struct s_info
 	pthread_mutex_t	starving_mutex;
 	long			start_time;
 }	t_info;
-
 
 typedef struct s_fork
 {
@@ -62,7 +73,8 @@ void	philo_info_free(t_info **info);
 
 /*	philo_intialize.c */
 int		initialize_philosophers(t_phil **phils, int argc, char **argv);
-int		assign_philosopher_resources(t_phil **phils, t_info **info, t_fork **forks, int total);
+int		assign_philosopher_resources(t_phil **phils, t_info **info, \
+		t_fork **forks, int total);
 void	cleanup_philosophers(t_phil **phils);
 
 /*	threads.c */
@@ -77,10 +89,11 @@ void	*routine(void *arg);
 /*	eat.c */
 int		perform_eating(t_phil *phil);
 int		eat_time(t_phil *phil, int time);
-int		acquire_fork(t_phil *phil, t_fork *fork_1, t_fork *fork_2);
-// void	release_fork(t_phil *phil, t_fork *fork, char *side);
+int		check_starving(t_phil *phil);
 void	release_fork(t_fork *fork);
 
+/*	acquire_fork.c */
+int		acquire_fork(t_phil *phil, t_fork *fork_1, t_fork *fork_2);
 
 /*	die.c */
 void	handle_death(t_phil *phil);
@@ -91,7 +104,8 @@ int		perform_sleeping(t_phil *phil);
 void	perform_thinking(t_phil *phil);
 
 /*	cleanup_resources.c */
-void	cleanup_resources(t_info *info, t_fork *forks, t_phil *phils, pthread_t *threads);
+void	cleanup_resources(t_info *info, t_fork *forks, t_phil *phils, \
+		pthread_t *threads);
 
 /*	philo.c */
 int		main(int argc, char **argv);
