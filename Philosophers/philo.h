@@ -14,8 +14,10 @@ typedef struct s_info
 	int				print;
 	int				death;
 	int				ready;
+	int				phil_starving[200];
 	pthread_mutex_t	lock;
 	pthread_mutex_t	start_mutex;
+	pthread_mutex_t	starving_mutex;
 	long			start_time;
 }	t_info;
 
@@ -36,6 +38,7 @@ typedef struct s_phil
 	int				time_eat;
 	int				time_sleep;
 	int				time_rest;
+	int				is_starving;
 	t_fork			*left;
 	t_fork			*right;
 	t_info			*info;
