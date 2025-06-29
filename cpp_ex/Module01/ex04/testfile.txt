@@ -1,0 +1,15 @@
+This is a test file to check whether the following "hello" 
+are being replaced or not.
+hello hello
+hello world.
+hello people.
+
+
+
+________________________________________________________
+
+
+
+
+hello
+________________________________________________________
