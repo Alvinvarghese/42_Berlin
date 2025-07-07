@@ -15,6 +15,10 @@ public:
 
 	void whoAmI();
 
+	void get_hitPoints() const;
+	void get_energyPoints() const;
+	void get_attackDamage() const;
+
 private:
 	std::string name;
 };
